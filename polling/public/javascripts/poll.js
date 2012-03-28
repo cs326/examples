@@ -6,7 +6,7 @@ var get_msg = function () {
 	});
 	
 	req.done(function (data) {
-		console.log('received data: ' + data.msg);
+		  //console.log('received data: ' + data.msg);
 		$('#display').text(data.msg);
 	});
 };
@@ -24,7 +24,7 @@ var set_msg = function () {
 		notify.html('Message "' + data.msg + '" Received');
 		$('#display').text(data.msg);
 		notify.fadeOut(function () {
-			notify.empty('slow');
+			notify.empty();
 			notify.show();
 		});
 	});
@@ -46,7 +46,7 @@ $(function () {
 	get_msg();
 	start_polling();
 	
-	$('#msg').bind('change', function (event) {
+	$('#msg').bind('keyup', function (event) {
 		set_msg();
 	});
 });

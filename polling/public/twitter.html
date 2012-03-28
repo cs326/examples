@@ -1,0 +1,43 @@
+<html>
+<head>
+	<script type="text/javascript"
+			src="http://code.jquery.com/jquery-1.7.2.min.js">
+	</script>
+	<title>twitter</title>	
+</head>
+<body>
+<a href="https://dev.twitter.com/docs/api/1/get/search">Twitter JSON API</a><br/>
+<label for="">Search Twitter:</label>
+<input type="text" name="search" value="" id="search">
+<button id="button">Search</button>
+
+<p id="results"></p>
+
+<script type="text/javascript" charset="utf-8">
+
+var search = function (q) {
+	var src = 'http://search.twitter.com/search.json'; 
+	var qry = '?q=' + q + '&rpp=5&include_entities=true&result_type=mixed';
+	
+	$.ajax({
+		url: src + qry,
+		dataType: 'jsonp'
+	}).done(function (json) {
+							$('p').empty();
+							$('p').append('<b>Results for ' + q + ':</b><br/>');
+							for (var i = 0; i < json.results.length; i++) {
+								var res = json.results[i];
+								$('p').append('<img src="' + res.profile_image_url + '"/>' +
+															res.from_user + ': ' +
+														  res.text + '<br/>');
+							}
+					});
+}
+
+$('#button').bind('click', function (event) {
+	search($('#search').val());
+});
+</script>
+
+</body>
+</html>

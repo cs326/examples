@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</head>
+
+<style type="text/css" media="screen">
+  div#output {
+    color: red;
+  }
+</style>
+
+<body>
+
+<p>
+  <input type="text" name="" value=""/>
+  <a href="" id="get">Retrieve Data</a>
+</p>
+
+<div id="output"></div>
+
+<script type="text/javascript">
+  var loaddata = function (url) {
+    // Create script tag:
+    var script = $('<script>');
+
+    // Set the src attribute:
+    script.attr('src', url);
+
+    // Append (load) the script:
+    $('body').append(script);
+  };
+
+  $('#get').bind('click',
+    function (event) {
+      // Load the "data":
+      loaddata('data.js');
+
+      // Get the id to display:
+      var id   = $('input').val();
+
+      // Display data after 300 ms:
+      setTimeout(function () {
+        $('#output').text(data[id]);
+      }, 300);
+      return false;
+    });
+</script>
+
+</body>
+</html>

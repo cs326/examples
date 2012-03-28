@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</head>
+
+<style type="text/css" media="screen">
+  div#output {
+    color: red;
+  }
+</style>
+
+<body>
+
+<p>
+  <input type="text" name="" value=""/>
+  <a href="" id="send">Send Pairs</a><br/>
+  <a href="/get-pairs.html">Go To Get Pairs...</a>
+</p>
+
+<div id="output"></div>
+
+<script type="text/javascript">
+  var postPairs = function (n1, n2) {
+    // New request:
+    var req = new XMLHttpRequest();
+    
+    // Post to server-side program:
+    req.open('POST', '/add-pairs');
+  
+    // Set content type header field:
+    req.setRequestHeader('Content-Type',
+                         'application/x-www-form-urlencoded');
+    
+    // Encode pairs data:
+    var data = 'n1=' + n1 + '&n2=' + n2;
+
+    // Send request:
+    req.send(data);
+  }
+
+  $('#send').bind('click',
+    function (event) {
+      // Get the pair
+      var data = $('input').val();
+      var pair = data.split(' ');
+  
+      if (pair.length >= 2) {
+        // Send to server:
+        postPairs(pair[0], pair[1]);
+      }
+
+      // Reset input field:
+      $('input').val('');
+
+      return false;
+    });
+</script>
+
+</body>
+</html>

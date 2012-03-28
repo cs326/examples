@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</head>
+
+<style type="text/css" media="screen">
+  iframe {
+    /* visibility: hidden;    */
+  }
+
+  div#output {
+    color: red;
+  }
+</style>
+
+<body>
+
+<iframe src="">
+
+</iframe>
+
+<p>
+  <input type="text" name="" value=""/>
+  <a href="" id="get">Retrieve Data</a>
+</p>
+
+<div id="output"></div>
+
+<script type="text/javascript">
+  var loaddata = function (url) {
+    // Set the iframe's src attribute:
+    $('iframe').attr('src', url);
+  };
+
+  var getdata = function (id) {
+    // Retrieve the required data from iframe:
+    return $('iframe').contents().find('#' + id).text();
+  };
+
+  $('#get').bind('click',
+    function (event) {
+      // Load the "data":
+      loaddata('data.html');
+
+      // Get the id to display:
+      var id   = $('input').val();
+
+      // Display data after 300 ms:
+      setTimeout(function () {
+        var data = getdata(id);
+        $('#output').text(data);
+      }, 300);
+      return false;
+    });
+</script>
+
+</body>
+</html>

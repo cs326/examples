@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</head>
+
+<style type="text/css" media="screen">
+  div#output {
+    color: red;
+  }
+</style>
+
+<body>
+
+<p>
+  <input type="text" name="" value="" size="1"/>
+  <a href="" id="get-xml">Get Pairs (XML)</a>, 
+  <a href="" id="get-json">Get Pairs (JSON)</a>
+  <br/>
+  <a href="/send-pairs.html">Go To Send Pairs...</a>
+</p>
+
+<div id="output"></div>
+
+<script type="text/javascript">
+  var postPair = function (idx, format, callback) {
+    // New request:
+    var req = new XMLHttpRequest();
+
+    // Get to server-side program:
+    if (format === 'xml') {
+      req.open('POST', '/get-pairs/xml');
+    }
+    else {
+      req.open('POST', '/get-pairs/json');
+    }
+  
+    // Set the state change handler:
+    req.onreadystatechange = function () {
+      //
+      // There are five readyState values:
+      //   UNSENT           0   open() has not been called yet.
+      //   OPENED           1   open() has been called.
+      //   HEADERS_RECEIVED 2   Headers have been received.
+      //   LOADING          3   The response body is being received.
+      //   DONE             4   The response is complete.
+      //
+   
+      // Here we check for the DONE state and if we have a callback:
+      if (req.readyState === 4 && callback) {
+        if (format === 'xml') {
+          callback(req.responseXML);
+        }
+        else {
+          callback(JSON.parse(req.responseText));
+        }
+      }
+    };
+
+    // Set content type header field to JSON MIME type:
+    req.setRequestHeader('Content-Type', 'application/json');
+    
+    // Construct a message to send to the server:
+    var msg = { index: idx };
+
+    // Send request:
+    req.send(JSON.stringify(msg));
+  }
+
+  // For Getting XML From Server:
+  $('#get-xml').bind('click',
+    function (event) {
+      // Get the index value of the pair to lookup:
+      var num = $('input').val();
+      var idx = parseInt(num);
+
+      postPair(idx, 'xml', function (xml) {
+        var serializer = new XMLSerializer();
+        console.log('Received Pair: ' + serializer.serializeToString(xml));
+
+        var first  = $(xml).find('first').text();
+        var second = $(xml).find('second').text();
+        if (first === '') {
+          $('#output').html('Not Found');
+        }
+        else {
+          $('#output').html(first + ', ' + second);
+        }
+      });
+
+      // Reset input field:
+      $('input').val('');
+
+      return false;
+    });
+
+  // For Getting JSON From Server:
+  $('#get-json').bind('click',
+    function (event) {
+      // Get the index value of the pair to lookup:
+      var num = $('input').val();
+      var idx = parseInt(num);
+
+      postPair(idx, 'json', function (pair) {
+        console.log('Received Pair: ' + JSON.stringify(pair));
+
+        if (!pair.first) {
+          $('#output').html('Not Found');
+        }
+        else {
+          var first  = pair.first;
+          var second = pair.second;
+          $('#output').html(first + ', ' + second);
+        }
+      });
+
+      // Reset input field:
+      $('input').val('');
+
+      return false;
+    });
+</script>
+
+</body>
+</html>

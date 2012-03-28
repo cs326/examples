@@ -15,6 +15,6 @@ communication between multiple browsers. We also demonstrate the use
 of the `dataType` property for [jquery][jQuery] Ajax requests to allow
 *cross-site* scripting to communicate to the Twitter JSON API.
 
-twitter: https://dev.twitter.com/docs/api/1/get/search
-jquery: http://jquery.com
-jajax: http://api.jquery.com/category/ajax
+twitter: [https://dev.twitter.com/docs/api/1/get/search]
+jquery: [http://jquery.com]
+jajax: [http://api.jquery.com/category/ajax]

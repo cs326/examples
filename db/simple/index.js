@@ -20,6 +20,7 @@ exports.sailors = function () {
 	var query = client.query('select * from sailors;');
 	var res   = [];
 	query.on('row', function (row) {
+		console.log('row: ' + row.sname);
 		res.push(row.sname);
 	});
 	return res;

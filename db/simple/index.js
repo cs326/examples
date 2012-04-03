@@ -7,25 +7,28 @@ var port = 7391;
 // The postgres client.
 var client;
 
-/**
- * @author Tim Richards
- */
 exports.connect = function (user, db) {
-	var conn = 'tcp://' + user + '@' + host + ':' + port + '/' + db;
-	client = new pg.Client(conn);
-	client.connect();
+    if (!db) {
+        db = user;
+    }
+
+	  var conn = 'tcp://' + user + '@' + host + ':' + port + '/' + db;
+	  client = new pg.Client(conn);
+	  client.connect();
 };
 
-exports.sailors = function () {
-	var query = client.query('select * from sailors;');
-	var res   = [];
-	query.on('row', function (row) {
-		console.log('row: ' + row.sname);
-		res.push(row.sname);
-	});
-	return res;
+exports.sailors = function (cb) {
+	  var query = client.query('select * from sailors;');
+	  var res   = [];
+	  query.on('row', function (row) {
+		    res.push(row.sname);
+	  });
+
+    query.on('end', function () {
+        cb(res);
+    });
 };
 
 exports.end = function () {
-	client.end();
+	  client.end();
 };

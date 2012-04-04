@@ -1,0 +1,18 @@
+{
+    "author": "Tim Richards <richards@cs.umass.edu>",
+    "name": "db",
+    "description": "Examples of using node.js and postgres",
+    "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/cs326/examples.git"
+    },
+    "engines": {
+        "node": "~0.6.7"
+    },
+    "dependencies": {
+        "pg": "0.6.17",
+        "commander": "0.5.2"
+    },
+    "devDependencies": {}
+}

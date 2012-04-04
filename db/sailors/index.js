@@ -1,4 +1,5 @@
-var pg = require('pg');
+// native provides SSL support required for remote connections:
+var pg = require('pg').native; 
 
 // Configuration.
 var host = 'db-edlab.cs.umass.edu';
@@ -8,12 +9,12 @@ var port = 7391;
 var client;
 
 exports.db = function (user, pass, db) {
-    if (pass) {
-        user = user + ':' + pass;
-    }
-
     if (!db) {
         db = user;
+    }
+
+    if (pass) {
+        user = user + ':' + pass;
     }
 
     var obj = {};
@@ -26,6 +27,9 @@ exports.db = function (user, pass, db) {
 function listSailors (cb) {
     var that = this;
     pg.connect(that.conn, function (err, client) {
+        if (err) {
+            throw err;
+        }
         client.query('select * from sailors;',
                      function (err, result) {
                          cb(err, result)

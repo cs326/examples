@@ -7,7 +7,11 @@ var port = 7391;
 // The postgres client.
 var client;
 
-exports.db = function (user, db) {
+exports.db = function (user, pass, db) {
+    if (pass) {
+        user = user + ':' + pass;
+    }
+
     if (!db) {
         db = user;
     }

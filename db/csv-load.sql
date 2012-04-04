@@ -13,12 +13,6 @@ create table sailors (
   unique (sname)
 	);
 
-create table reserves (
-	sid int,
-	bid int,
-	day date
-	);
-
 drop sequence boats_bid_seq;
 create sequence boats_bid_seq;
 create table boats (
@@ -27,6 +21,12 @@ create table boats (
 	color varchar(14),
   primary key (bid),
   unique (bid, bname, color)
+	);
+
+create table reserves (
+	sid int,
+	bid int,
+	day date
 	);
 	
 -- note that the CSV files must have an absolute path:

@@ -7,28 +7,40 @@ var port = 7391;
 // The postgres client.
 var client;
 
-exports.connect = function (user, db) {
+exports.db = function (user, db) {
     if (!db) {
         db = user;
     }
 
-	  var conn = 'tcp://' + user + '@' + host + ':' + port + '/' + db;
-	  client = new pg.Client(conn);
-	  client.connect();
-};
+    var obj = {};
+    obj.conn = 'tcp://' + user + '@' + host + ':' + port + '/' + db;
+    obj.listSailors = listSailors;
+    obj.addSailor   = addSailor;
+    return obj;
+}
 
-exports.sailors = function (cb) {
-	  var query = client.query('select * from sailors;');
-	  var res   = [];
-	  query.on('row', function (row) {
-		    res.push(row.sname);
-	  });
-
-    query.on('end', function () {
-        cb(res);
+function listSailors (cb) {
+    var that = this;
+    pg.connect(that.conn, function (err, client) {
+        client.query('select * from sailors;',
+                     function (err, result) {
+                         cb(err, result)
+                     });
     });
 };
 
-exports.end = function () {
-	  client.end();
+function addSailor(obj, cb) {
+    var that = this;
+    if (obj.sname && obj.rating && obj.age) {
+        pg.connect(that.conn, function (err, client) {
+            var sql = 'insert into sailors values(default, $1, $2, $3);';
+            client.query(sql, [obj.sname, obj.rating, obj.age],
+                         function (err, result) {
+                             cb(err, obj)
+                         });
+        });
+    }
+    else {
+        throw "Invalid sailor object: " + JSON.stringify(obj);
+    }
 };

@@ -1,11 +1,11 @@
 var sailors = require('sailors');
 
-// Simple example of connecting to postgres:
-sailors.connect('richards');
-sailors.sailors(function (res) {
-    console.log('Sailors:');
-    for (var i = 0; i < res.length; i++) {
-        console.log('   ' + res[i]);
+var db = sailors.db('richards');
+db.listSailors(function (err, result) {
+    var rows = result.rows;
+    for (var i = 0; i < rows.length; i++) {
+        console.log('   ' + rows[i].sname);
     }
-    sailors.end();
+    process.exit(0);
 });
+

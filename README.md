@@ -1,6 +1,8 @@
 # CMPSCI 326 Web Programming
 ## Code Examples
 
+- **db** shows you how to connect to a postgres database using
+the [node-postgres][pg] library.
 - **fs** demonstrates the `fs` module in node.js.
 - **iframe** demonstrates the use of an iframe element to accomplish
 Ajax calls to the server.
@@ -18,3 +20,4 @@ of the `dataType` property for [jQuery][jquery] Ajax requests to allow
 [twitter]: https://dev.twitter.com/docs/api/1/get/search
 [jquery]: http://jquery.com
 [jajax]: http://api.jquery.com/category/ajax
+[pg]: https://github.com/brianc/node-postgres

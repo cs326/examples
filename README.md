@@ -16,6 +16,7 @@ Ajax polling using the `setInterval` client-side function to enable
 communication between multiple browsers. We also demonstrate the use
 of the `dataType` property for [jQuery][jquery] Ajax requests to allow
 *cross-site* scripting to communicate to the [Twitter JSON API][twitter].
+- **ws** demonstrates the WebSocket API using io.socket.
 
 [twitter]: https://dev.twitter.com/docs/api/1/get/search
 [jquery]: http://jquery.com

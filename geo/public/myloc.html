@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" 
+          src="http://maps.googleapis.com/maps/api/js?sensor=false">
+  </script>
+
+  <script type="text/javascript" 
+          src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+  </script>
+
+  <script type="text/javascript" 
+          src="/javascripts/geo.js">
+  </script>
+
+  <style type="text/css" media="screen">
+    #view { 
+      width       : 1000px;
+      height      : 610px;
+      margin-right: auto;
+      margin-left : auto;
+      border      : 1px solid black;
+    }
+
+    #map_canvas { 
+      width       : 480px;
+      height      : 600px;
+      margin-left : 5px;
+      margin-top  : 5px;
+      border      : 1px solid black;
+      float       : left;
+    }
+    
+    #map_control {
+      width        : 480px;
+      height       : 600px;
+      margin-left  : 25px;
+      margin-top   : 5px;
+      border       : 0px solid black;
+      float        : left;
+    }
+  </style>
+
+  <script type="text/javascript">
+    $(function () {
+        // Makes a google Map object:
+        function makeGMap(mapcanvas, options) {
+            return new google.maps.Map(mapcanvas, options);
+        }
+
+        // Makes a google maps LatLng object:
+        function makeGPos(lat, lon) {
+            return new google.maps.LatLng(lat, lon);
+        }
+
+        // Makes a google maps Marker object:
+        function makeGMarker(pos, gmap, title) {
+            return new google.maps.Marker({
+                position: pos,
+                map     : gmap,
+                title   : title
+            });
+        }
+
+        // Makes a google maps Polyline object:
+        function makeGPolyline(options) {
+            return new google.maps.Polyline(options);
+        }
+
+        // Registers a Map listener with an event of the given type:
+        function addGMapListener(map, type, cb) {
+            google.maps.event.addListener(map, type, cb);
+        }
+
+        // Creates a google Map with a marker at (lat, lon):
+        function setOnMap (lat, lon) {
+            var options = {
+                center: makeGPos(lat, lon),
+                zoom  : 17,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var mapc = $('#map_canvas')[0];
+            var map  = makeGMap(mapc, options);
+
+            // Make marker for my position:
+            var mypos    = makeGPos(lat, lon);
+            var mymarker = makeGMarker(mypos, map, 'My Location');
+            updateView(lat, lon);
+            updateAddress(lat, lon, map, mymarker);
+
+            // Adds an event listener to add markers at (lat,lng) position
+            // and creates a polyline connecting our location with the new
+            // Marker object:
+            addGMapListener(map, 'click', function (event) {
+                makeGMarker(event.latLng, map);
+                makeGPolyline({ 'map' : map,
+                                'path': [event.latLng, mypos],
+                                strokeOpacity: 0.5,
+                                strokeWeight : 5 });
+
+                // This determines the distance between the two markers and
+                // displays that information in our view:
+                var dist = new google.maps.DistanceMatrixService();
+                dist.getDistanceMatrix({ origins: [event.latLng],
+                                         destinations: [mypos],
+                                         travelMode: google.maps.TravelMode.WALKING
+                                       },
+                                       function (res, status) {
+                                           var row  = res.rows[0];
+                                           var elm  = row.elements[0];
+                                           var dist = elm.distance.text;
+                                           $('#address').append('Position (' +
+                                                                event.latLng.lat()  + ', ' +
+                                                                event.latLng.lng()  + ') ' +
+                                                                'is ' + dist + ' away.<br/>');
+                                       });
+            });
+        }
+
+        // Sets our location on the map:
+        function setMyLoc (pos) {
+            var lat = pos.coords.latitude;
+            var lon = pos.coords.longitude;
+            setOnMap(lat, lon);
+        }
+
+        // Updates our position on the view:
+        function updateView (lat, lon) {
+            // Update view:
+            $('#pos').html('<b>Latitude:</b> ' + lat.toFixed(4) +
+                           ', <b>Longitude:</b> ' + lon.toFixed(4));
+        }
+
+        // Updates the address in our view:
+        function updateAddress (lat, lon, map, marker) {
+            var pos      = makeGPos(lat, lon);
+            var geocoder = new google.maps.Geocoder();
+
+            function update (addr) {
+                $('#address').html('<b>Address:</b>' + addr + '<br/>');
+                var infowindow = new google.maps.InfoWindow();
+                // Creates a 'infowindow' containing our address:
+                infowindow.setContent('<b>Address:</b>' + addr);
+                infowindow.open(map, marker);
+            }
+
+            // Does a lookup to get our address given the (lat,lng) posstion:
+            geocoder.geocode ({ 'latLng' : pos }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        update(results[0].formatted_address);
+                    }
+                }
+                else {
+                    console.log('Geocoder failed: ' + status);
+                }
+            });
+        }
+
+        // Uses our Geo library to get our current location using
+        // the geolocation API:
+        Geo.getLoc(setMyLoc);
+    });
+  </script>
+</head>
+<body>
+  <div id="view">
+    <div id="map_canvas">
+    </div>
+    <div id="map_control">
+      <p id="pos"></p>
+      <p id="address"></p>
+    </div>    
+  </div>
+</body>
+</html>

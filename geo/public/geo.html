@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Geo Block</title>
+<script type="text/javascript" 
+        src="socket.io/socket.io.js">
+</script>
+<script type="text/javascript" 
+        src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+</script>
+<script type="text/javascript" 
+        src="javascripts/geo.js"></script>
+<script type="text/javascript" 
+        src="javascripts/block.js"></script>
+
+<script type="text/javascript">
+  $(function () {
+    Block.init();
+  });
+</script>
+
+<link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen" />
+
+</head>
+<body>
+<p id="pos"></p>
+<p id="msg"></p>
+<div id="board">
+</div>
+</body>
+</html>

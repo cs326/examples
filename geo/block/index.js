@@ -43,15 +43,17 @@ function connectEvent (socket) {
         socket.emit('block', msg);
     });
 
-    // Send to other clients:
-    socket.broadcast.emit('+block', block);
-
     // Register message events:
     socket.on('move', function (msg) {
         moveEvent(socket, msg);
     });
 
-    socket.on('disconnect', disconnectEvent);
+    socket.on('disconnect', function () {
+        disconnectEvent(socket);
+    });
+
+    // Send to other clients:
+    socket.broadcast.emit('+block', block);
 }
 
 // The only public function:

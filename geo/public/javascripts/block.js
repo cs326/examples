@@ -1,9 +1,6 @@
 var Block = { };
 
 Block.init = function () {
-    // Create the socket to the server:
-    var socket = io.connect();
-
     // This is this client's block:
     var block;
     
@@ -23,6 +20,9 @@ Block.init = function () {
         // Notify server of the changed position for this block:
         socket.emit('move', block);
     });
+
+    // Create the socket to the server:
+    var socket = io.connect();
 
     // Register the connect message on the socket:
     socket.on('connect', connect);

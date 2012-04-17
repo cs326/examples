@@ -1,5 +1,6 @@
+// commander is a library for getting passwords from commandline:
 var program = require('commander');
-var sailors = require('sailors');
+var sailors = require('./sailors');
 
 function run (user, pass) {
     var db = sailors.db('richards', pass);

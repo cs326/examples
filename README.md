@@ -17,6 +17,8 @@ communication between multiple browsers. We also demonstrate the use
 of the `dataType` property for [jQuery][jquery] Ajax requests to allow
 *cross-site* scripting to communicate to the [Twitter JSON API][twitter].
 - **ws** demonstrates the WebSocket API using io.socket.
+- **upload** has an example of how to use the express framework to
+upload a file from a browser to the server.
 
 [twitter]: https://dev.twitter.com/docs/api/1/get/search
 [jquery]: http://jquery.com

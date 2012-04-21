@@ -32,11 +32,24 @@ var search = function (q) {
 														  res.text + '<br/>');
 							}
 					});
-}
+};
 
 $('#button').bind('click', function (event) {
 	search($('#search').val());
 });
+
+var logtwitter = function (place) {
+	var qry = 'http://api.twitter.com/1/geo/search.json?query=' + place;
+	
+	$.ajax({
+		url: qry,
+		dataType: 'jsonp'
+	}).done(function (json) {
+            console.log(json);
+					});
+};
+
+
 </script>
 
 </body>
